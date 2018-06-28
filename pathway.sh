@@ -3,8 +3,12 @@
 SCRIPT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 
 function set_aliases() {
+
+  echo "inside set_aliases"
   cat ${SCRIPT_DIR}/TESTHISTFILE.txt | sort | uniq -c >> SORTED_COMMANDS.txt
-  
+  cat SORTED_COMMANDS.txt
+
+  IFS=$'\n'
   for l in $(cat "${SCRIPT_DIR}/SORTED_COMMANDS.txt")
   do
 
@@ -23,8 +27,11 @@ i=0
 
 function capture_input() {
   i=$(($i+1))
-  
+
+  echo "current count $i"
+
   if [ $(($i%10)) == 0 ]; then
+    echo "running set_alias"
     set_aliases
   fi
 
