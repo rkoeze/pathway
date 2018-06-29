@@ -1,5 +1,18 @@
-TODO: At 500 path aliases, begin decrementing the number of commands by 25
+# Pathway
 
-TODO: Take a default of the top 25 most common directories and dynamically alias
-them by making the final folder the alias. If multiple directories have the
-same name, keep track of them and allow the user to select from a menu.
+Pathway is a easy-to-use bash script that dynamically generates filepath
+aliases for the directories you spend the most time in.
+
+### Installation
+
+To install, run git clone in your home directory and make sure `pathway.sh`
+is sourced in your `.bashrc`
+
+### To-dos
+
+* Optimize on-startup performance. Given that a user's most commonly traversed
+filepaths will change over time, I don't need to be storing their history anyway.
+
+* Allow user to blacklist certain filepaths and aliases to avoid collisions.
+
+* Add API docs.
