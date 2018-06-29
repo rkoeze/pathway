@@ -1,6 +1,7 @@
 #!/bin/bash
 
 SCRIPT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+FREEZE=false
 
 function set_aliases() {
 
@@ -14,7 +15,7 @@ function set_aliases() {
     new_alias=$(echo $l | sed -r 's/(.*\/)+//g')
     alias_filepath=$(echo $l | sed -r 's/.*[ ]//g')
 
-    if ! type $new_alias > /dev/null; then
+    if ! type $new_alias 2> /dev/null; then
       alias $new_alias="cd $alias_filepath"
     fi
 
@@ -23,13 +24,9 @@ function set_aliases() {
 
 i=0
 
-FREEZE=false
-
 function capture_input() {
   if [ "$FREEZE" = "false" ]; then
     i=$(($i+1))
-
-    echo "current count $i"
 
     if [ $(($i%10)) == 0 ]; then
       set_aliases
@@ -39,15 +36,12 @@ function capture_input() {
   fi
 }
 
-
 function pw() {
   declare opt
   declare OPTARG
   declare OPTIND
 
-  echo "trying to work"
   while getopts "cns:d:fu" opt; do
-    echo "working"
     case $opt in
       "c")
         cat "${SCRIPT_DIR}/SORTED_COMMANDS.txt";;
@@ -55,9 +49,8 @@ function pw() {
         : > "${SCRIPT_DIR}/SORTED_COMMANDS.txt"
         : > "${SCRIPT_DIR}/COMMAND_LOG.txt";;
       "s")
-        new_alias=${OPTARG}
         alias_filepath=$(cat SORTED_COMMANDS.txt | sed -rn '/notes+$/p' | sed -r "s/.*\s.*[0-9]\s//g")
-        cat $("${new_alias} = cd ${alias_filepath}" >> "${SCRIPT_DIR}/SAVED.txt")
+        echo "${alias_filepath}" >> "${SCRIPT_DIR}/SAVED.txt"
         ;;
       "d")
         old_alias=${OPTARG}
@@ -83,7 +76,13 @@ function load_aliases() {
   IFS=$'\n'
   for l in $(cat "${SCRIPT_DIR}/SAVED.txt")
   do
-    eval $l
+    new_alias=$(echo $l | sed -r 's/(.*\/)+//g')
+    alias_filepath=$(echo $l | sed -r 's/.*[ ]//g')
+
+    if ! type $new_alias 2> /dev/null; then
+      alias $new_alias="cd $alias_filepath"
+    fi
+
   done
 }
 
