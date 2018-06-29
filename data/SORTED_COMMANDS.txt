@@ -1,5 +1,2 @@
-     19 /home/rkoeze
-      9 /home/rkoeze/Development
-     45 /home/rkoeze/Development/notes
-      2 /home/rkoeze/Development/notes/linux
-    299 /home/rkoeze/Development/pathway
+      2 /home/rkoeze/Documents
+      3 /home/rkoeze/Development/pathway
