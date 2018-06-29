@@ -3,10 +3,9 @@
 SCRIPT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 
 function set_aliases() {
-
-  echo "inside set_aliases"
-  cat ${SCRIPT_DIR}/TESTHISTFILE.txt | sort | uniq -c >> SORTED_COMMANDS.txt
-  cat SORTED_COMMANDS.txt
+  
+  : > "${SCRIPT_DIR}/SORTED_COMMANDS.txt"
+  cat "${SCRIPT_DIR}/TESTHISTFILE.txt" | sort | uniq -c >> "${SCRIPT_DIR}/SORTED_COMMANDS.txt"
 
   IFS=$'\n'
   for l in $(cat "${SCRIPT_DIR}/SORTED_COMMANDS.txt")
@@ -16,7 +15,6 @@ function set_aliases() {
     alias_filepath=$(echo $l | sed -r 's/.*[ ]//g')
 
     if ! type $new_alias > /dev/null; then
-      echo "working!"
       alias $new_alias="cd $alias_filepath"
     fi
 
@@ -31,11 +29,28 @@ function capture_input() {
   echo "current count $i"
 
   if [ $(($i%10)) == 0 ]; then
-    echo "running set_alias"
     set_aliases
   fi
 
   echo $PWD >> ${SCRIPT_DIR}/TESTHISTFILE.txt
 }
 
-PROMPT_COMMAND="$PROMPT_COMMAND capture_input"
+
+function pw() {
+  echo "trying to work"
+  while getopts "cd" opt; do
+    echo "working"
+    case $opt in
+      "c")
+        cat "${SCRIPT_DIR}/SORTED_COMMANDS.txt";;
+      "n")
+        : > "${SCRIPT_DIR}/SORTED_COMMANDS.txt"
+        : > "${SCRIPT_DIR}/TESTHISTFILE.txt";;
+    esac
+  done
+}
+
+export -f pw
+
+
+#PROMPT_COMMAND="$PROMPT_COMMAND capture_input"
