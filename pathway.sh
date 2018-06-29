@@ -5,11 +5,11 @@ FREEZE=false
 
 function set_aliases() {
 
-  : > "${SCRIPT_DIR}/SORTED_COMMANDS.txt"
-  cat "${SCRIPT_DIR}/COMMAND_LOG.txt" | sort | uniq -c >> "${SCRIPT_DIR}/SORTED_COMMANDS.txt"
+  : > "${SCRIPT_DIR}/data/SORTED_COMMANDS.txt"
+  cat "${SCRIPT_DIR}/data/COMMAND_LOG.txt" | sort -rn | head -5 | uniq -c >> "${SCRIPT_DIR}/data/SORTED_COMMANDS.txt"
 
   IFS=$'\n'
-  for l in $(cat "${SCRIPT_DIR}/SORTED_COMMANDS.txt")
+  for l in $(cat "${SCRIPT_DIR}/data/SORTED_COMMANDS.txt")
   do
 
     new_alias=$(echo $l | sed -r 's/(.*\/)+//g')
@@ -29,10 +29,10 @@ function capture_input() {
     i=$(($i+1))
 
     if [ $(($i%10)) == 0 ]; then
-      set_aliases
+      set_aliases > /dev/null
     fi
 
-    echo $PWD >> "${SCRIPT_DIR}/COMMAND_LOG.txt"
+    echo $PWD >> "${SCRIPT_DIR}/data/COMMAND_LOG.txt"
   fi
 }
 
@@ -44,13 +44,13 @@ function pw() {
   while getopts "cns:d:fu" opt; do
     case $opt in
       "c")
-        cat "${SCRIPT_DIR}/SORTED_COMMANDS.txt";;
+        cat "${SCRIPT_DIR}/data/SORTED_COMMANDS.txt";;
       "n")
-        : > "${SCRIPT_DIR}/SORTED_COMMANDS.txt"
-        : > "${SCRIPT_DIR}/COMMAND_LOG.txt";;
+        : > "${SCRIPT_DIR}/data/SORTED_COMMANDS.txt"
+        : > "${SCRIPT_DIR}/data/COMMAND_LOG.txt";;
       "s")
         alias_filepath=$(cat SORTED_COMMANDS.txt | sed -rn '/notes+$/p' | sed -r "s/.*\s.*[0-9]\s//g")
-        echo "${alias_filepath}" >> "${SCRIPT_DIR}/SAVED.txt"
+        echo "${alias_filepath}" >> "${SCRIPT_DIR}/data/SAVED.txt"
         ;;
       "d")
         old_alias=${OPTARG}
@@ -74,7 +74,7 @@ export -f pw
 
 function load_aliases() {
   IFS=$'\n'
-  for l in $(cat "${SCRIPT_DIR}/SAVED.txt")
+  for l in $(cat "${SCRIPT_DIR}/data/SAVED.txt")
   do
     new_alias=$(echo $l | sed -r 's/(.*\/)+//g')
     alias_filepath=$(echo $l | sed -r 's/.*[ ]//g')
@@ -86,6 +86,6 @@ function load_aliases() {
   done
 }
 
-load_aliases
-set_aliases
+load_aliases > /dev/null
+set_aliases > /dev/null
 PROMPT_COMMAND="$PROMPT_COMMAND capture_input"
