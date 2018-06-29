@@ -1,5 +1,3 @@
-TODO: Every 25 bash commands calculate/recalculate the path aliases
-
 TODO: At 500 path aliases, begin decrementing the number of commands by 25
 
 TODO: Iterate through commands, storing the path as a key and the number of
