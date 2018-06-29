@@ -1,24 +1,21 @@
 #!/bin/bash
 
-SCRIPT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 FREEZE=false
+SCRIPT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 
 function set_aliases() {
-
   : > "${SCRIPT_DIR}/data/SORTED_COMMANDS.txt"
-  cat "${SCRIPT_DIR}/data/COMMAND_LOG.txt" | sort -rn | head -5 | uniq -c >> "${SCRIPT_DIR}/data/SORTED_COMMANDS.txt"
+  cat "${SCRIPT_DIR}/data/COMMAND_LOG.txt" | uniq -c | sort -rn | head -5 >> "${SCRIPT_DIR}/data/SORTED_COMMANDS.txt"
 
   IFS=$'\n'
   for l in $(cat "${SCRIPT_DIR}/data/SORTED_COMMANDS.txt")
   do
-
     new_alias=$(echo $l | sed -r 's/(.*\/)+//g')
     alias_filepath=$(echo $l | sed -r 's/.*[ ]//g')
 
     if ! type $new_alias 2> /dev/null; then
       alias $new_alias="cd $alias_filepath"
     fi
-
   done
 }
 
@@ -34,6 +31,20 @@ function capture_input() {
 
     echo $PWD >> "${SCRIPT_DIR}/data/COMMAND_LOG.txt"
   fi
+}
+
+function load_aliases() {
+  IFS=$'\n'
+  for l in $(cat "${SCRIPT_DIR}/data/SAVED.txt")
+
+  do
+    new_alias=$(echo $l | sed -r 's/(.*\/)+//g')
+    alias_filepath=$(echo $l | sed -r 's/.*[ ]//g')
+
+    if ! type $new_alias 2> /dev/null; then
+      alias $new_alias="cd $alias_filepath"
+    fi
+  done
 }
 
 function pw() {
@@ -71,20 +82,6 @@ function pw() {
 }
 
 export -f pw
-
-function load_aliases() {
-  IFS=$'\n'
-  for l in $(cat "${SCRIPT_DIR}/data/SAVED.txt")
-  do
-    new_alias=$(echo $l | sed -r 's/(.*\/)+//g')
-    alias_filepath=$(echo $l | sed -r 's/.*[ ]//g')
-
-    if ! type $new_alias 2> /dev/null; then
-      alias $new_alias="cd $alias_filepath"
-    fi
-
-  done
-}
 
 load_aliases > /dev/null
 set_aliases > /dev/null
