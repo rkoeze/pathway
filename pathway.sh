@@ -3,9 +3,9 @@
 SCRIPT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 
 function set_aliases() {
-  
+
   : > "${SCRIPT_DIR}/SORTED_COMMANDS.txt"
-  cat "${SCRIPT_DIR}/TESTHISTFILE.txt" | sort | uniq -c >> "${SCRIPT_DIR}/SORTED_COMMANDS.txt"
+  cat "${SCRIPT_DIR}/COMMAND_LOG.txt" | sort | uniq -c >> "${SCRIPT_DIR}/COMMAND_LOG.txt"
 
   IFS=$'\n'
   for l in $(cat "${SCRIPT_DIR}/SORTED_COMMANDS.txt")
@@ -45,7 +45,11 @@ function pw() {
         cat "${SCRIPT_DIR}/SORTED_COMMANDS.txt";;
       "n")
         : > "${SCRIPT_DIR}/SORTED_COMMANDS.txt"
-        : > "${SCRIPT_DIR}/TESTHISTFILE.txt";;
+        : > "${SCRIPT_DIR}/COMMAND_LOG.txt";;
+      "s")
+        ;;
+      "d")
+        ;;
     esac
   done
 }
@@ -53,4 +57,4 @@ function pw() {
 export -f pw
 
 
-#PROMPT_COMMAND="$PROMPT_COMMAND capture_input"
+PROMPT_COMMAND="$PROMPT_COMMAND capture_input"
