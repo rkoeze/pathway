@@ -84,7 +84,6 @@ function pw() {
 
 export -f pw
 
-
 if [ ! -d "${SCRIPT_DIR}/data" ]; then
   mkdir "${SCRIPT_DIR}/data"
 fi
