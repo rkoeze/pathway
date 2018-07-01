@@ -4,6 +4,7 @@ FREEZE=false
 SCRIPT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 
 function set_aliases() {
+
   : > "${SCRIPT_DIR}/data/SORTED_COMMANDS.txt"
   cat "${SCRIPT_DIR}/data/COMMAND_LOG.txt" | sort | uniq -c | sort -rn | head -5 >> "${SCRIPT_DIR}/data/SORTED_COMMANDS.txt"
 
@@ -29,7 +30,6 @@ function capture_input() {
     if [ $(($i%10)) == 0 ]; then
       set_aliases > /dev/null
     fi
-
     echo $PWD >> "${SCRIPT_DIR}/data/COMMAND_LOG.txt"
   fi
 }
@@ -84,9 +84,17 @@ function pw() {
 
 export -f pw
 
+
+if [ ! -d "${SCRIPT_DIR}/data" ]; then
+  mkdir "${SCRIPT_DIR}/data"
+fi
+
 if [ -f "${SCRIPT_DIR}/data/SAVED.txt" ]; then
   load_aliases > /dev/null
 fi
 
-set_aliases > /dev/null
+if [ -f "${SCRIPT_DIR}/data/COMMAND_LOG.txt" ]; then
+  set_aliases > /dev/null
+fi
+
 PROMPT_COMMAND="$PROMPT_COMMAND capture_input"
