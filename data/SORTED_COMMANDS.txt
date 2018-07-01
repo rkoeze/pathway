@@ -1,5 +1,0 @@
-    149 /home/rkoeze/Development/pathway
-     37 /home/rkoeze/Music
-     35 /home/rkoeze/Development/pathway/data
-     31 /home/rkoeze/Development/iD
-     22 /home/rkoeze/Development/sfhomelessnessfacts
