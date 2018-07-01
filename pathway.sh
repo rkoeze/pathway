@@ -84,6 +84,9 @@ function pw() {
 
 export -f pw
 
-load_aliases > /dev/null
+if [ -f "${SCRIPT_DIR}/data/SAVED.txt" ]; then
+  load_aliases > /dev/null
+fi
+
 set_aliases > /dev/null
 PROMPT_COMMAND="$PROMPT_COMMAND capture_input"
