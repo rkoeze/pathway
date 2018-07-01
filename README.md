@@ -11,7 +11,8 @@ is sourced in your `.bashrc`
 
 ### API
 
-You can use Pathway from the command with the following arguments.
+You can use Pathway from the command line with the command `pw` plus the following
+arguments.
 
 Command | Use
 ------- | -------
