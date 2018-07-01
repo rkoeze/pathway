@@ -19,8 +19,8 @@ Command | Use
 -r | Remove aliased filepaths and directory history
 -s `alias_name` | Save dynamically generated aliases
 -d `alias_name` | Delete dynamically generated aliases
--f | Freeze Pathway
--u | Unfreeze Pathway
+-f | Freeze dynamic creation of aliases
+-u | Unfreeze dynamic creation of alises
 
 ### Compatability
 
