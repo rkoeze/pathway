@@ -27,10 +27,3 @@ Command | Use
 
 This has been extensively tested on my Linux machine. I can't vouch for Mac or
 PC, so feel free to make a PR if you find bugs.
-
-### To-dos
-
-* Optimize on-startup performance. Given that a user's most commonly traversed
-filepaths will change over time, I don't need to be storing their history anyway.
-
-* Allow user to blacklist certain filepaths and aliases to avoid collisions.
