@@ -4,7 +4,8 @@ FREEZE=false
 SCRIPT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 
 function set_aliases() {
-
+  
+  # TODO: Update ranking algorithm so it's performant with more aliases.
   cat "${SCRIPT_DIR}/data/COMMAND_LOG.txt" | sort | uniq -c >> "${SCRIPT_DIR}/data/SORTED_COMMANDS.txt"
   awk -F ' ' '{a[$2]+=$1}END{for(i in a) print "     "a[i]" "i}' "${SCRIPT_DIR}/data/SORTED_COMMANDS.txt" > "${SCRIPT_DIR}/data/tmpfile.txt"
   cat "${SCRIPT_DIR}/data/tmpfile.txt" | sort -rn > "${SCRIPT_DIR}/data/SORTED_COMMANDS.txt"
